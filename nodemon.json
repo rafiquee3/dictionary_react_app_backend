@@ -1,0 +1,6 @@
+{
+    "env": {
+        "DBNAME": "dictionary-words",
+        "PORT": "80"
+    }
+}
