@@ -40,7 +40,24 @@ describe('list all words from db', () => {
         expectResponse(allWordsFromDb)
     })
 });
+describe('show one word from db', () => {
+    it('works', async () => {
+        const word = "hello";
+        const translation = "world";
+        req.body = { word, translation};
 
+        await dictionaryControler.insertWordInToDb(req, res);
+
+        const allWordsFromDb = await getWords();
+        const newWord = allWordsFromDb[allWordsFromDb.length - 1];
+        req.params.id = newWord._id;
+
+        await dictionaryControler.findOneWord(req, res);
+        
+        expectStatus(200);
+        expect(res.json).toHaveBeenCalledWith(newWord);
+    })
+});
 describe('adding a word to the database', () => {
     it('works', async () => {
         const word = "hello";

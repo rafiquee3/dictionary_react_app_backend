@@ -27,6 +27,43 @@ module.exports.listAllWords = async (req, res) => {
           });
     }
 }
+module.exports.findOneWord = async (req, res) => {
+    let id = req.params.id;
+    const allWordsFromDb = await getWords();
+
+    try {
+        if (ObjectId.isValid(id)) {
+            id = ObjectId(id);
+        } else {
+            res.status(404);
+            res.json({
+                message: 'Invalid id'
+            });
+            return;
+        } 
+        const isWordExist = allWordsFromDb.find(wordInDb => wordInDb._id.equals(id));
+
+        if (!isWordExist) {
+            res.status(404);
+            res.json({
+                message: 'the specified word does not exist in the database'
+            });
+            return;
+        }
+
+        const wordToShow = await getWords(id);
+
+        res.status(200);
+        res.json(wordToShow[0]);
+
+    } catch (err) {
+
+        res.status(404);
+        res.json({
+            errors: err,
+        });
+    }
+};
 module.exports.insertWordInToDb = async (req, res) => {
     if (!req.body.word) { req.body.word = '' };
     if (!req.body.translation) { req.body.translation = '' };

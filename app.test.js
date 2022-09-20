@@ -7,8 +7,21 @@ beforeAll(connect);
 beforeEach(drop);
 afterAll(disconnect);
 
-it('list of all words available in the database', async () => {
+it('list of all words available in the data base', async () => {
     const response = await request(app).get('/');
+
+    expect(response.status).toEqual(200);
+    expect(response.header['content-type']).toEqual('application/json; charset=utf-8')
+});
+it('show one word from data base', async () => {
+    const word = 'hello';
+    const translation = 'world'
+    const createResponse = await request(app).post('/').send({ word, translation });
+
+    const createdWord = JSON.parse(createResponse.text);
+    const id = createdWord._id;
+
+    const response = await request(app).get(`/${id}`);
 
     expect(response.status).toEqual(200);
     expect(response.header['content-type']).toEqual('application/json; charset=utf-8')

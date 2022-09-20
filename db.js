@@ -37,3 +37,8 @@ module.exports.findOneAndDeleteTodo = async (id) => {
      );
     return result;
 }
+module.exports.getUser = async (search = {}) => {
+    const collection = await getCollection('users');
+
+    return await collection.find(search).toArray();
+}

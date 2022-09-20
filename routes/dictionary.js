@@ -11,6 +11,7 @@ PUT /:id      TO UPDATE A SPECIFIC WORD
  */
 
 router.get('/', dictionaryControllers.listAllWords);
+router.get('/:id', dictionaryControllers.findOneWord);
 router.post('/', dictionaryControllers.insertWordInToDb);
 router.delete('/:id', dictionaryControllers.deleteWordInToDb);
 router.put('/:id', dictionaryControllers.editWordInDb);
