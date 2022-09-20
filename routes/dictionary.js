@@ -11,11 +11,9 @@ PUT /:id      TO UPDATE A SPECIFIC WORD
  */
 
 router.get('/', dictionaryControllers.listAllWords);
-/* router.get('/:id', );
-router.post('/', );
-router.delete('/:id',);
-router.put('/:id',); */
 router.post('/', dictionaryControllers.insertWordInToDb);
-router.use((request, response) => response.status(404).end());
+router.delete('/:id', dictionaryControllers.deleteWordInToDb);
+router.put('/:id', dictionaryControllers.editWordInDb);
+router.use((req, res) => res.status(404).end());
 
 module.exports = router;

@@ -30,8 +30,9 @@ app.use(cookieSession({
 //app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dictionaryRouter);
-//app.use('/users', usersRouter);
+app.use('/users', usersRouter);
+
 
 //connect();
 
-module.exports = app;
+module.exports.application = app ;

@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 
-app = require('../app');
+let { application } = require('../app');
+
+const app = application;
 const debug = require('debug')('backend:server');
 const http = require('http');
 

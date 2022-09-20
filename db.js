@@ -1,7 +1,5 @@
 const { getDb } = require('./client.js');
 
-//const collectionName = 'todos';
-
 const getCollection = (collectionName = 'dictionary') => {
     const db = getDb();
     return db.collection(collectionName);
@@ -30,7 +28,7 @@ module.exports.findAndUpdateWord = async (id, modify) => {
         modify, // parameters to modify
         {returnDocument: "after"}, // return updated doc
     );
-    return result.value;
+    return result;
 }
 module.exports.findOneAndDeleteTodo = async (id) => {
     const collection = await getCollection();
