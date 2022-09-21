@@ -69,14 +69,14 @@ module.exports.insertWordInToDb = async (req, res) => {
     if (!req.body.translation) { req.body.translation = '' };
     
     const { word, translation } = req.body;
-    const validator = wordIsInValidFormat(word, translation);
+    const validatorErrors = wordIsInValidFormat(word, translation);
     const allWordsFromDb = await getWords();
 
     try {
-        if (validator[0]) {
+        if (validatorErrors.length > 0) {
             res.status(400);
             res.json({
-                errors: validator,
+                errors: validatorErrors,
             });
             return;
         } 

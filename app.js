@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session')
 const { connect } = require('./client');
 const config = require('./config');
+const { createCollection } = require('./db');
 const createError = require('http-errors');
 const logger = require('morgan');
 
@@ -15,10 +16,6 @@ const app = express();
 app.set('x-powered-by', false);
 
 app.use(logger('dev'));
-// error handler 
-/* app.use(function (req, res, next) {
-    next(createError(404))
-  }) */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); 
 app.use(cookieParser());
@@ -29,10 +26,14 @@ app.use(cookieSession({
   }))
 //app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', dictionaryRouter);
+app.use('/words', dictionaryRouter);
 app.use('/users', usersRouter);
-
-
-//connect();
+// error handler 
+app.use(function (req, res, next) {
+  next(createError(404))
+})
+/* connect();
+createCollection('users');
+createCollection('dictionary'); */
 
 module.exports.application = app ;

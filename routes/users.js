@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const dictionaryControllers = require('../controllers/dictionary');
+const usersControllers = require('../controllers/users');
 
 /* 
 GET /         LIST OF ALL USERS
@@ -10,11 +10,9 @@ DELETE /:id   DELETE A SPECIFIC WORD
 PUT /:id      TO UPDATE A SPECIFIC WORD
  */
 
-/* router.get('/', dictionaryControllers.listAllWords);
-router.get('/:id', dictionaryControllers.findOneWord);
-router.post('/', dictionaryControllers.insertWordInToDb);
-router.delete('/:id', dictionaryControllers.deleteWordInToDb);
-router.put('/:id', dictionaryControllers.editWordInDb); */
+router.get('/', usersControllers.listAllUsers);
+router.post('/find', usersControllers.findUser);
+router.post('/add', usersControllers.addUser);
 router.use((req, res) => res.status(404).end());
 
 module.exports = router;
