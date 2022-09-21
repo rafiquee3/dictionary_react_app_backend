@@ -52,3 +52,12 @@ module.exports.insertUser = async (login, password) => {
 
     return { _id, ...doc }
 }
+module.exports.findAndUpdateUser = async (id, modify) => {
+    const collection = await getCollection('users');
+    const result = await collection.findOneAndUpdate(
+        {_id: id},
+        modify, // parameters to modify
+        {returnDocument: "after"}, // return updated doc
+    );
+    return result;
+}

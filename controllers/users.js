@@ -1,4 +1,4 @@
-const { createCollection, getUser, insertUser } = require('../db');
+const { createCollection, findAndUpdateUser, getUser, insertUser } = require('../db');
 const { ObjectId } = require('mongodb');
 
 const userIsInValidFormat = (login, password) => {
@@ -30,11 +30,18 @@ module.exports.listAllUsers = async (req, res) => {
 }
 module.exports.addUser = async (req, res) => {
     try {
+        if (!req.body.login || !req.body.password) {
+            req.body = {
+                login: '',
+                password: ''
+            }
+        }
+   
         const { login, password } = req.body;
         //createCollection('users');
         const user = await getUser({login});
         const validatorErrors = userIsInValidFormat(login, password);
-
+        
         if (user.length > 0) {
           res.status(404);
           res.json({
@@ -102,4 +109,62 @@ module.exports.findUser = async (req, res) => {
             message: err,
         });
       }
+}
+module.exports.editUser = async (req, res) => {
+    try {
+        let id = req.params.id;
+        const { login, password } = req.body;
+        const validatorErrors = userIsInValidFormat(login, password);
+     
+        if (!req.body.login)  req.body.login = '';
+        if (!req.body.password) req.body.password = '';
+
+        if (validatorErrors.length > 0) {
+            res.status(400);
+            res.json({
+                errors: validatorErrors,
+            });
+            return;
+        }
+        
+        if (ObjectId.isValid(id)) {
+            id = ObjectId(id);
+        } else {
+            res.status(404);
+            res.json({
+                message: 'Invalid id'
+            });
+            return;
+        }
+
+        if (!login || !password) {
+            res.status(404);
+            res.json({
+                message: 'Missing body in request',
+            });
+        
+            return;
+        }
+
+        const user = await getUser({_id: id});
+
+        if (user.length === 0) {
+            res.status(404);
+            res.json({
+                message: 'User name incorrect',
+            });
+        
+            return;
+        }
+        const result = await findAndUpdateUser(id, {$set: {
+            login,
+            password
+        }});
+ 
+        res.status(200);
+        res.json(result.value);
+
+    } catch (err) {
+
+    }
 }

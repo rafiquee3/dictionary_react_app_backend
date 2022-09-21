@@ -141,3 +141,20 @@ describe('find user', () => {
         });
     })
 });
+describe('edit user', () => {
+    it('works', async () => {
+        const login = 'login';
+        const password = 'password';
+        req.body = { login, password };
+
+        await usersControler.addUser(req, res);
+
+        const allUsers = await getUser();
+        const id = allUsers[0]._id;
+        req.params.id = id;
+        await usersControler.editUser(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ _id: id, login, password });
+    })
+});
