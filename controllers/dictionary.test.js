@@ -17,6 +17,7 @@ beforeEach(async () => {
 });
 beforeAll(connect);
 beforeEach(drop);
+afterEach(drop);
 afterAll(disconnect);
 
 const expectStatus = (status) => {

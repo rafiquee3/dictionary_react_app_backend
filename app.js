@@ -32,8 +32,8 @@ app.use('/users', usersRouter);
 app.use(function (req, res, next) {
   next(createError(404))
 })
-/* connect();
-createCollection('users');
-createCollection('dictionary'); */
+//connect();
+//createCollection('users');
+//createCollection('dictionary');
 
 module.exports.application = app ;

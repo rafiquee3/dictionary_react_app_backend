@@ -61,3 +61,10 @@ module.exports.findAndUpdateUser = async (id, modify) => {
     );
     return result;
 }
+module.exports.findOneAndDeleteUser = async (id) => {
+    const collection = await getCollection('users');
+    const result = collection.findOneAndDelete(
+        {_id: id}
+     );
+    return result;
+}

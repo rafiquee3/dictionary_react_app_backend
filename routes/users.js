@@ -13,7 +13,8 @@ PUT /:id      TO UPDATE A SPECIFIC WORD
 router.get('/', usersControllers.listAllUsers);
 router.post('/find', usersControllers.findUser);
 router.post('/add', usersControllers.addUser);
-router.put('/edit', usersControllers.editUser);
+router.put('/:id', usersControllers.editUser);
+router.delete('/:id', usersControllers.deleteUser);
 router.use((req, res) => res.status(404).end());
 
 module.exports = router;
