@@ -6,25 +6,23 @@ const getCollection = (collectionName = 'dictionary') => {
 }
 module.exports.createCollection = async (collectionName) => {
     const db = getDb();
-    if (!db.collection(collectionName)) {
-        db.createCollection(collectionName);
-    }
+    db.createCollection(collectionName)
 }
-module.exports.getWords = async (search = {}) => {
-    const collection = await getCollection();
+module.exports.getWords = async (search = {}, collectionName) => {
+    const collection = await getCollection(collectionName);
 
     return await collection.find(search).toArray();
 }
-module.exports.insertWord = async (word, translation) => {
-    const collection = await getCollection();
-    const doc = { word, translation };
+module.exports.insertWord = async (word, translation, collectionName) => {
+    const collection = await getCollection(collectionName);
+    const doc = { word, translation, difficulty: 0};
     const result = await collection.insertOne(doc);
     const _id = result.insertedId;
 
     return { _id, ...doc }
 }
-module.exports.findAndUpdateWord = async (id, modify) => {
-    const collection = await getCollection();
+module.exports.findAndUpdateWord = async (id, modify, collectionName) => {
+    const collection = await getCollection(collectionName);
     const result = await collection.findOneAndUpdate(
         {_id: id},
         modify, // parameters to modify
@@ -32,8 +30,8 @@ module.exports.findAndUpdateWord = async (id, modify) => {
     );
     return result;
 }
-module.exports.findOneAndDeleteTodo = async (id) => {
-    const collection = await getCollection();
+module.exports.findOneAndDeleteTodo = async (id, collectionName) => {
+    const collection = await getCollection(collectionName);
     const result = collection.findOneAndDelete(
         {_id: id}
      );

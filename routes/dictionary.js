@@ -10,11 +10,13 @@ DELETE /:id   DELETE A SPECIFIC WORD
 PUT /:id      TO UPDATE A SPECIFIC WORD
  */
 
-router.get('/', dictionaryControllers.listAllWords);
+router.post('/', dictionaryControllers.listAllWords);
 router.get('/:id', dictionaryControllers.findOneWord);
-router.post('/', dictionaryControllers.insertWordInToDb);
-router.delete('/:id', dictionaryControllers.deleteWordInToDb);
-router.put('/:id', dictionaryControllers.editWordInDb);
+router.post('/add', dictionaryControllers.insertWordInToDb);
+router.delete('/:user/:id', dictionaryControllers.deleteWordInToDb);
+router.put('/:collection/:id/:word/:translation', dictionaryControllers.editWordInDb);
+router.put('/:collection/:id', dictionaryControllers.increaseDifficultyLevel);
+router.put('/dec/:collection/:id', dictionaryControllers.decreaseDifficultyLevel);
 router.use((req, res) => res.status(404).end());
 
 module.exports = router;

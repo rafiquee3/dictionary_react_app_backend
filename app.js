@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session')
+const cors = require('cors');
 const { connect } = require('./client');
 const config = require('./config');
 const { createCollection } = require('./db');
@@ -24,6 +25,11 @@ app.use(cookieSession({
     keys: config.keySession, 
     maxAge: config.maxAgeSession 
   }))
+app.use((req, res, next) => {
+  console.log(req.body)
+  next();
+})
+app.use(cors());
 //app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/words', dictionaryRouter);
@@ -32,7 +38,7 @@ app.use('/users', usersRouter);
 app.use(function (req, res, next) {
   next(createError(404))
 })
-//connect();
+connect();
 //createCollection('users');
 //createCollection('dictionary');
 

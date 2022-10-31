@@ -10,10 +10,12 @@ const userIsInValidFormat = (login, password) => {
     if (password.length < 5) errors.push({ field: 'password', error: 'the entered password should contain at least 5 characters' });
     if (password.length > 13) errors.push({ field: 'password', error: 'the entered password should contain at max 13 characters' });
     
-    const reg = /^[a-zA-Z0-9]+[_]?[a-zA-Z0-9]+$/;
-    if (!(reg.test(login))) errors.push({ field: 'login', error: 'login should consist of letters and numbers and may contain _' });
-    if (!(reg.test(password))) errors.push({ field: 'password', error: 'password should consist of letters and numbers and may contain _' });
-   
+    if (login.length > 0 && password.length > 0) {
+        const reg = /^[a-zA-Z0-9]+[_]?[a-zA-Z0-9]+$/;
+
+        if (!(reg.test(login))) errors.push({ field: 'login', error: 'login should consist of letters and numbers and may contain _' });
+        if (!(reg.test(password))) errors.push({ field: 'password', error: 'password should consist of letters and numbers and may contain _' });
+    }
     return errors;
 }
 
@@ -32,14 +34,12 @@ module.exports.listAllUsers = async (req, res) => {
 }
 module.exports.addUser = async (req, res) => {
     try {
-        if (!req.body.login || !req.body.password) {
-            req.body = {
-                login: '',
-                password: ''
-            }
-        }
+
+        if (!req.body.login) req.body.login = '';
+        if (!req.body.password) req.body.password = '';
+
         const { login, password } = req.body;
-        //createCollection('users');
+        
         const user = await getUser({login});
         const validatorErrors = userIsInValidFormat(login, password);
 
@@ -54,7 +54,7 @@ module.exports.addUser = async (req, res) => {
         if (validatorErrors.length > 0) {
             res.status(400);
             res.json({
-                errors: validatorErrors,
+                message: validatorErrors,
             });
             return;
         }
@@ -63,6 +63,8 @@ module.exports.addUser = async (req, res) => {
         const hash = bcrypt.hashSync(password, salt);
 
         const newUser = await insertUser(login, hash);
+        //if (login !== '')
+        await createCollection(login);
 
         res.status(200);
         res.json(newUser);
@@ -83,7 +85,7 @@ module.exports.findUser = async (req, res) => {
         if (!login || !password) {
             res.status(404);
             res.json({
-                message: 'Missing body in request',
+                message: 'Missing login or password',
             });
         
             return;
